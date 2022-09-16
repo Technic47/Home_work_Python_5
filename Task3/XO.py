@@ -74,7 +74,8 @@ while True:
                     pygame.draw.line(screen, white, (x + 5, y + 5), (x + size_block - 5, y + size_block - 5), 10)
                     pygame.draw.line(screen, white, (x + size_block - 5, y + 5), (x + 5, y + size_block - 5), 10)
                 elif color == green:
-                    pygame.draw.circle(screen, white, (x + size_block // 2, y + size_block // 2), size_block // 2 - 3, 10)
+                    pygame.draw.circle(screen, white, (x + size_block // 2, y + size_block // 2), size_block // 2 - 3,
+                                       10)
     if (query - 1) % 2 == 0:
         game_over = check_win(mas, 'X')
     else:
