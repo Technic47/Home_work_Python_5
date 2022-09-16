@@ -37,20 +37,12 @@ class Player:
         print(f'Player {self.name} lose. At least you will stay healthier')
 
 
-class Bot:
-    def __init__(self, name: str) -> None:
-        self.name = name
-        self.sweets = 0
+class Bot(Player):
 
     def take_sweets(self, maxx: int = 28):
         number = randint(1, maxx)
         self.sweets += number
         print(f'Bot took {number} sweets')
-        return number
-
-    def give_sweets(self):
-        number = self.sweets
-        self.sweets = 0
         return number
 
     def win(self):
