@@ -10,13 +10,14 @@ class Player:
 
 class Game:
     def __init__(self, player1_sign: str, player2_sign: str) -> None:
-        # self.player1_sign = player1_sign
-        # self.player2_sign = player2_sign
+        self.player1_sign = player1_sign
+        self.player2_sign = player2_sign
         self.game_over = False
         self.mas = [[0] * 3 for i in range(3)]
         self.query = 0
+        # self.query = [self.player1_sign, self.player2_sign]
 
-    def check_win(self, mas, sign):
+    def check_win(self, mas, sign: str):
         zeros = 0
         for row in self.mas:
             zeros += row.count(0)
@@ -58,13 +59,13 @@ class Game:
                     row = y_mouse // (size_block + margin)
                     if self.mas[row][col] == 0:
                         if self.query % 2 == 0:
-                            self.mas[row][col] = 'X'
+                            self.mas[row][col] = self.player1_sign
                         else:
-                            self.mas[row][col] = 'O'
+                            self.mas[row][col] = self.player2_sign
                         self.query += 1
+
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     self.mas = [[0] * 3 for i in range(3)]
-                    self.query = 0
                     self.game_over = False
                     screen.fill(black)
 
@@ -90,11 +91,10 @@ class Game:
                                                (x + size_block // 2, y + size_block // 2),
                                                size_block // 2 - 3, 10)
 
-
             if (self.query - 1) % 2 == 0:
-                self.game_over = self.check_win(self.mas, 'X')
+                self.game_over = self.check_win(self.mas, self.player1_sign)
             else:
-                self.game_over = self.check_win(self.mas, 'O')
+                self.game_over = self.check_win(self.mas, self.player2_sign)
 
             if self.game_over:
                 screen.fill(black)
@@ -110,6 +110,7 @@ class Game:
 
 def main() -> None:
     player1_sign = input("Choose sign for player 1 (X or O):")
+    player2_sign = ''
     if player1_sign == 'X':
         player2_sign = 'O'
     elif player1_sign == 'O':
