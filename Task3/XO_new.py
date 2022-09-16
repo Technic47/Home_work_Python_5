@@ -32,6 +32,7 @@ class Game:
             return "Piece"
         return False
 
+
     def start(self):
         black = (0, 0, 0)
         red = (225, 0, 0)
@@ -45,6 +46,21 @@ class Game:
         size_window = (width, heigth)
         screen = pygame.display.set_mode(size_window)
         pygame.display.set_caption('Крестики - нолики')
+
+        pygame.draw.rect(screen, white, (margin, margin, size_block, size_block))
+        font = pygame.font.SysFont('stxingkai', 80)
+        text1 = font.render('X', True, black)
+        text_rect = text1.get_rect()
+        text_x = margin + size_block//2
+        text_y = screen.get_height() / 2 - text_rect.height / 2
+        screen.blit(text1, [text_x, text_y])
+        pygame.draw.rect(screen, white, (size_block + margin * 2, margin, size_block, size_block))
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x_mouse, y_mouse = pygame.mouse.get_pos()
+
 
         while True:
             for event in pygame.event.get():
