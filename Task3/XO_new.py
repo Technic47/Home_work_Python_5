@@ -3,8 +3,7 @@ import sys
 
 
 class Player:
-    def __init__(self, name: str, sign: str) -> None:
-        self.name = name
+    def __init__(self, sign: str) -> None:
         self.sign = sign
 
 
@@ -15,19 +14,18 @@ class Game:
         self.game_over = False
         self.mas = [[0] * 3 for i in range(3)]
         self.query = 0
-        # self.query = [self.player1_sign, self.player2_sign]
 
     def check_win(self, mas, sign: str):
         zeros = 0
         for row in self.mas:
             zeros += row.count(0)
             if row.count(sign) == 3:
-                return sign
+                return sign + 'Wins'
         for col in range(3):
             if self.mas[0][col] == sign and self.mas[1][col] == sign and self.mas[2][col] == sign:
-                return sign
+                return sign + 'Wins'
         if self.mas[0][0] == sign and self.mas[1][1] == sign and self.mas[2][2] == sign:
-            return sign
+            return sign + 'Wins'
         if self.mas[2][0] == sign and self.mas[1][1] == sign and self.mas[2][0] == sign:
             return sign
         if zeros == 0:
