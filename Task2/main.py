@@ -61,23 +61,10 @@ class Bot:
 
 
 class Cheetbot(Bot):
-    # def __init__(self, name: str) -> None:
-    #     self.name = name
-    #     self.sweets = 0
-
-    # def win(self):
-    #     print(f'Bot wins!!! Destroy all the sweets!')
-
     def lose(self):
         print(
             "Cheetbot has suddenly eaten all his sweets. You will not get them."
             "\nSweets are digital, so yes it it possible")
-
-    # def take_sweets(self, maxx: int = 28):
-    #     number = randint(1, maxx)
-    #     self.sweets += number
-    #     print(f'Bot took {number} sweets')
-    #     return number
 
     def give_sweets(self):
         self.sweets = 0
@@ -107,7 +94,8 @@ class Game:
 
     def print_sweets_count(self) -> None:
         print(
-            f'\nSweets on the table: {self.table_sweets}, {self.player1.name} has {self.player1.sweets} sweets, {self.player2.name} has {self.player2.sweets} sweets\n')
+            f'\nSweets on the table: {self.table_sweets}, {self.player1.name} has {self.player1.sweets} '
+            f'sweets, {self.player2.name} has {self.player2.sweets} sweets\n')
 
     def lottery(self) -> None:
         print('Lottery for first start says:')
@@ -127,6 +115,20 @@ class Game:
                 print(f'{self.player2.name} starts first!')
                 break
 
+    def finish(self, index: int):
+        self.players[index].sweets += self.players[not index].give_sweets()
+        self.players[index].win()
+        self.players[not index].lose()
+        self.print_sweets_count()
+        quit()
+
+    def bot_finish(self):
+        self.player2.sweets += self.player1.give_sweets()
+        self.player2.win()
+        self.player1.lose()
+        self.print_sweets_count()
+        quit()
+
     def player_turn(self, index):
         if self.players[index].__class__ == Player:
             if self.table_sweets < 28 and self.table_sweets != 0:
@@ -137,11 +139,7 @@ class Game:
             self.table_sweets -= number
             self.print_sweets_count()
             if self.table_sweets == 0:
-                self.players[index].sweets += self.players[not index].give_sweets()
-                self.players[index].win()
-                self.players[not index].lose()
-                self.print_sweets_count()
-                quit()
+                self.finish(index)
 
         elif self.players[index].__class__ == Bot:
             if self.table_sweets < 28 and self.table_sweets != 0:
@@ -151,11 +149,7 @@ class Game:
             self.table_sweets -= number
             self.print_sweets_count()
             if self.table_sweets == 0:
-                self.player2.sweets += self.player1.give_sweets()
-                self.player2.win()
-                self.player1.lose()
-                self.print_sweets_count()
-                quit()
+                self.bot_finish()
 
         elif self.players[index].__class__ == Cheetbot:
             if self.table_sweets < 28 and self.table_sweets != 0:
@@ -165,11 +159,7 @@ class Game:
             self.table_sweets -= number
             self.print_sweets_count()
             if self.table_sweets == 0:
-                self.player2.sweets += self.player1.give_sweets()
-                self.player2.win()
-                self.player1.lose()
-                self.print_sweets_count()
-                quit()
+                self.bot_finish()
 
     def start(self) -> None:
         self.lottery()
@@ -196,6 +186,8 @@ def main() -> None:
         player2_name = '!CheetBot!'
         game = Game(player1_name, player2_name, 2)
         game.start()
+    else:
+        print('Wrong type of game!')
 
 
 if __name__ == '__main__':
