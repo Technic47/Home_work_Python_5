@@ -18,52 +18,74 @@ class Player:
         self.name = name
         self.sweets = 0
 
-    def take_sweets(self, maxx: int = 28):
+    def take_sweets(self, maxx: int = 28) -> int:
+        """
+        Controls how many sweest player will take
+        :param maxx: - maximum value
+        :return: - number for counting
+        """
         number = int(input(f"{self.name}, how many sweets will you take from the table? "))
         if number < 1 or number > maxx:
             number = int(input(f"{self.name}, you enter wrong number, try again: "))
         self.sweets += number
         return number
 
-    def give_sweets(self):
+    def give_sweets(self) -> int:
+        """Processes giveaway after loosing"""
         number = self.sweets
         self.sweets = 0
         return number
 
-    def win(self):
+    def win(self) -> None:
+        """Prints winning message"""
         print(f'Player {self.name} wins!!! All these sweeeeety sweets are yours, fatass!')
 
-    def lose(self):
+    def lose(self) -> None:
+        """Prints losing message"""
         print(f'Player {self.name} lose. At least you will stay healthier')
 
 
 class Bot(Player):
 
-    def take_sweets(self, maxx: int = 28):
+    def take_sweets(self, maxx: int = 28) -> int:
+        """
+        Controls how many sweest bot will take
+        :param maxx: - maximum value
+        :return: - number for counting
+        """
         number = randint(1, maxx)
         self.sweets += number
         print(f'Bot took {number} sweets')
         return number
 
-    def win(self):
+    def win(self) -> None:
+        """Prints winning message"""
         print(f'Bot wins!!! Destroy all the sweets!')
 
-    def lose(self):
+    def lose(self) -> None:
+        """Prints losing message"""
         print(f'Bot loses. But he remembers your name and your browser history.')
 
 
 class Cheetbot(Bot):
-    def lose(self):
+    def lose(self) -> None:
+        """Prints losing message"""
         print(
             "Cheetbot has suddenly eaten all his sweets. You will not get them."
             "\nSweets are digital, so yes it it possible")
 
-    def give_sweets(self):
+    def give_sweets(self) -> None:
+        """Processes giveaway after loosing"""
         self.sweets = 0
         number = self.sweets
         return number
 
-    def cheet_take_sweets(self, number):
+    def cheet_take_sweets(self, number) -> int:
+        """
+        Controls how many sweest bot will take
+        :param maxx: - maximum value
+        :return: - number for counting
+        """
         self.sweets += number
         print(f'Bot took {number} sweets')
         return number
@@ -85,11 +107,13 @@ class Game:
         self.index1 = 0
 
     def print_sweets_count(self) -> None:
+        """Prints counts of sweets for players and table"""
         print(
             f'\nSweets on the table: {self.table_sweets}, {self.player1.name} has {self.player1.sweets} '
             f'sweets, {self.player2.name} has {self.player2.sweets} sweets\n')
 
     def lottery(self) -> None:
+        """Decides who will turn first"""
         print('Lottery for first start says:')
         points_player1 = 0
         points_player2 = 0
@@ -107,21 +131,24 @@ class Game:
                 print(f'{self.player2.name} starts first!')
                 break
 
-    def finish(self, index: int):
+    def finish(self, index: int) -> None:
+        """Process finishing of the game pvp"""
         self.players[index].sweets += self.players[not index].give_sweets()
         self.players[index].win()
         self.players[not index].lose()
         self.print_sweets_count()
         quit()
 
-    def bot_finish(self):
+    def bot_finish(self) -> None:
+        """Process finishing of the game with bots"""
         self.player2.sweets += self.player1.give_sweets()
         self.player2.win()
         self.player1.lose()
         self.print_sweets_count()
         quit()
 
-    def player_turn(self, index):
+    def player_turn(self, index) -> None:
+        """Processes game mechanic"""
         if self.players[index].__class__ == Player:
             if self.table_sweets < 28 and self.table_sweets != 0:
                 number = self.players[index].take_sweets(self.table_sweets)
@@ -154,6 +181,7 @@ class Game:
                 self.bot_finish()
 
     def start(self) -> None:
+        """Processes starting of the game"""
         self.lottery()
         self.print_sweets_count()
         while self.table_sweets > 0:
