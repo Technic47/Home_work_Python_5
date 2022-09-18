@@ -46,6 +46,13 @@ class Game:
         screen = pygame.display.set_mode(size_window)
         pygame.display.set_caption('Крестики - нолики')
 
+        # screen.fill(black)
+        #
+        # pygame.draw.rect(screen, white, (0, 0, size_block, size_block))
+        # x = size_block + margin
+        #
+        # pygame.draw.rect(screen, white, (x, 0, size_block, size_block))
+
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
