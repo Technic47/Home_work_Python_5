@@ -74,7 +74,7 @@ class Cheetbot(Bot):
             "Cheetbot has suddenly eaten all his sweets. You will not get them."
             "\nSweets are digital, so yes it it possible")
 
-    def give_sweets(self) -> None:
+    def give_sweets(self) -> int:
         """Processes giveaway after loosing"""
         self.sweets = 0
         number = self.sweets
@@ -191,23 +191,24 @@ class Game:
 
 def main() -> None:
     game_mode = input('How would you like to play? pvp or bot or cheetbot? ')
-    if game_mode == 'pvp':
-        player1_name = input("Enter Player1 name: ")
-        player2_name = input("Enter Player2 name: ")
-        game = Game(player1_name, player2_name, 0)
-        game.start()
-    elif game_mode == 'bot':
-        player1_name = input("Enter Player1 name: ")
-        player2_name = 'Bot'
-        game = Game(player1_name, player2_name, 1)
-        game.start()
-    elif game_mode == 'cheetbot':
-        player1_name = input("Enter Player1 name: ")
-        player2_name = '!CheetBot!'
-        game = Game(player1_name, player2_name, 2)
-        game.start()
-    else:
-        print('Wrong type of game!')
+    match game_mode:
+        case 'pvp':
+            player1_name = input("Enter Player1 name: ")
+            player2_name = input("Enter Player2 name: ")
+            game = Game(player1_name, player2_name, 0)
+            game.start()
+        case 'bot':
+            player1_name = input("Enter Player1 name: ")
+            player2_name = 'Bot'
+            game = Game(player1_name, player2_name, 1)
+            game.start()
+        case 'cheetbot':
+            player1_name = input("Enter Player1 name: ")
+            player2_name = '!CheetBot!'
+            game = Game(player1_name, player2_name, 2)
+            game.start()
+        case _:
+            print('Wrong type of game!')
 
 
 if __name__ == '__main__':

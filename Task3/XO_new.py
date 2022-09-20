@@ -1,6 +1,59 @@
 import pygame
 import sys
 
+objects = []
+pygame.init()
+size_block = 100
+margin = 15
+width = heigth = size_block * 3 + margin * 4
+
+size_window = (width, heigth)
+screen = pygame.display.set_mode(size_window)
+pygame.display.set_caption('Крестики - нолики')
+font = pygame.font.SysFont('Arial', 40)
+
+
+class Button:
+    def __init__(self, x, y, width, height, buttonText, onclickFunction, onePress=False):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.onclickFunction = onclickFunction
+        self.onePress = onePress
+        self.alreadyPressed = False
+
+        self.fillColors = {
+            'normal': '#ffffff',
+            'hover': '#666666',
+            'pressed': '#333333',
+        }
+        self.buttonSurface = pygame.Surface((self.width, self.height))
+        self.buttonRect = pygame.Rect(self.x, self.y, self.width, self.height)
+
+        self.buttonSurf = font.render(buttonText, True, (20, 20, 20))
+
+        objects.append(self)
+
+    def process(self):
+        mousePos = pygame.mouse.get_pos()
+        self.buttonSurface.fill(self.fillColors['normal'])
+        if self.buttonRect.collidepoint(mousePos):
+            self.buttonSurface.fill(self.fillColors['hover'])
+            if pygame.mouse.get_pressed(num_buttons=3)[0]:
+                self.buttonSurface.fill(self.fillColors['pressed'])
+                if self.onePress:
+                    self.onclickFunction()
+                elif not self.alreadyPressed:
+                    self.onclickFunction()
+                    self.alreadyPressed = True
+            else:
+                self.alreadyPressed = False
+        self.buttonSurface.blit(self.buttonSurf, [
+            self.buttonRect.width / 2 - self.buttonSurf.get_rect().width / 2,
+            self.buttonRect.height / 2 - self.buttonSurf.get_rect().height / 2])
+        screen.blit(self.buttonSurface, self.buttonRect)
+
 
 class Player:
     def __init__(self, sign: str) -> None:
@@ -8,7 +61,7 @@ class Player:
 
 
 class Game:
-    def __init__(self, player1_sign: str, player2_sign: str) -> None:
+    def __init__(self, player1_sign, player2_sign) -> None:
         self.player1_sign = player1_sign
         self.player2_sign = player2_sign
         self.game_over = False
@@ -20,51 +73,45 @@ class Game:
         for row in self.mas:
             zeros += row.count(0)
             if row.count(sign) == 3:
-                return sign + 'Wins'
+                return sign + ' Wins'
         for col in range(3):
             if self.mas[0][col] == sign and self.mas[1][col] == sign and self.mas[2][col] == sign:
-                return sign + 'Wins'
+                return sign + ' Wins'
         if self.mas[0][0] == sign and self.mas[1][1] == sign and self.mas[2][2] == sign:
-            return sign + 'Wins'
+            return sign + ' Wins'
         if self.mas[2][0] == sign and self.mas[1][1] == sign and self.mas[2][0] == sign:
             return sign
         if zeros == 0:
             return "Piece"
         return False
 
+        # self.start()
+
+    # def prerare(self):
+    # while True:
+    #     screen.fill((20, 20, 20))
+    #     for event in pygame.event.get():
+    #         if event.type == pygame.QUIT:
+    #             pygame.quit()
+    #             sys.exit()
+    #     for object in objects:
+    #         object.process()
+    #     pygame.display.flip()
 
     def start(self):
-        black = (0, 0, 0)
-        red = (225, 0, 0)
-        green = (0, 255, 0)
-        white = (255, 255, 255)
-        pygame.init()
-        size_block = 100
-        margin = 15
-        width = heigth = size_block * 3 + margin * 4
-
-        size_window = (width, heigth)
-        screen = pygame.display.set_mode(size_window)
-        pygame.display.set_caption('Крестики - нолики')
-
-        pygame.draw.rect(screen, white, (margin, margin, size_block, size_block))
-        font = pygame.font.SysFont('stxingkai', 80)
-        text1 = font.render('X', True, black)
-        text_rect = text1.get_rect()
-        text_x = margin + size_block//2
-        text_y = screen.get_height() / 2 - text_rect.height / 2
-        screen.blit(text1, [text_x, text_y])
-
-        pygame.draw.rect(screen, white, (size_block + margin * 2, margin, size_block, size_block))
-        pygame.display.update()
-
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                x_mouse, y_mouse = pygame.mouse.get_pos()
-
-
-
         while True:
+            black = (0, 0, 0)
+            red = (225, 0, 0)
+            green = (0, 255, 0)
+            white = (255, 255, 255)
+            pygame.init()
+            size_block = 100
+            margin = 15
+            width = heigth = size_block * 3 + margin * 4
+
+            size_window = (width, heigth)
+            screen = pygame.display.set_mode(size_window)
+            pygame.display.set_caption('Крестики - нолики')
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -124,16 +171,35 @@ class Game:
             pygame.display.update()
 
 
-def main() -> None:
-    player1_sign = input("Choose sign for player 1 (X or O):")
-    player2_sign = ''
-    if player1_sign == 'X':
-        player2_sign = 'O'
-    elif player1_sign == 'O':
-        player2_sign = 'X'
-    game = Game(player1_sign, player2_sign)
-    game.start()
+def main():
+    while True:
+        screen.fill((20, 20, 20))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        for object in objects:
+            object.process()
+        pygame.display.flip()
 
+
+def set_player_sign1():
+    signs[0] = 'X'
+    signs[1] = 'O'
+    print(signs)
+
+
+def set_player_sign2():
+    signs[0] = 'O'
+    signs[1] = 'X'
+    print(signs)
+
+
+signs = ['0', '0']
+game = Game(signs[0], signs[1])
+
+Button(30, 30, size_block, size_block, 'X', set_player_sign1())
+Button(30, 140, size_block, size_block, 'O', set_player_sign2())
 
 if __name__ == '__main__':
     main()

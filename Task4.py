@@ -19,7 +19,7 @@ def copy_text(path: str) -> str:
 
 def write_text(path, text) -> None:
     """Writes text to file"""
-    with open(r'Generated_text.txt', 'a') as data:
+    with open(path, 'a') as data:
         data.writelines(f'\n{text}')
 
 
